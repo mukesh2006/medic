@@ -47,12 +47,13 @@ const getInfoDoc = change => {
     .then(doc => updateInfoDoc(doc, rev));
 };
 
-const createInfoDoc = (docId, initialReplicationDate) => {
+const createInfoDoc = (docId) => {
   return {
     _id: infoDocId(docId),
     type: 'info',
     doc_id: docId,
-    initial_replication_date: initialReplicationDate,
+    initial_replication_date: 'unknown',
+    latest_replication_date: 'unknown'
   };
 };
 
@@ -71,7 +72,6 @@ const deleteInfoDoc = change => {
 };
 
 const updateInfoDoc = (doc, legacyRev) => {
-  doc.latest_replication_date = new Date();
   return db.sentinel.put(doc).then(() => {
     if (legacyRev) {
       // Removes legacy info doc
@@ -153,8 +153,6 @@ const bulkUpdate = infoDocs => {
       legacyDocs.push(Object.assign({ _deleted: true }, doc));
       delete doc._rev;
     }
-
-    doc.latest_replication_date = new Date();
   });
 
   return db.sentinel.bulkDocs(infoDocs).then(() => {

@@ -30,6 +30,7 @@ const _ = require('underscore'),
   upgrade = require('./controllers/upgrade'),
   settings = require('./controllers/settings'),
   bulkDocs = require('./controllers/bulk-docs'),
+  infodoc = require('./controllers/infodoc'),
   authorization = require('./middleware/authorization'),
   createUserDb = require('./controllers/create-user-db'),
   staticResources = /\/(templates|static)\//,
@@ -452,6 +453,7 @@ app.post(
 // this is an audited endpoint: online and filtered offline requests will pass through to the audit route
 app.post(
   routePrefix + '_bulk_docs(/*)?',
+  infodoc.mark,
   authorization.onlineUserPassThrough, // online user requests pass through to the next route
   jsonParser,
   bulkDocs.request,
@@ -478,7 +480,8 @@ app.get(
   dbDocHandler.request
 );
 app.post(
-  routePrefix,
+  `/+${environment.db}/?`,
+  infodoc.mark,
   authorization.onlineUserPassThrough, // online user requests pass through to the next route
   jsonParser, // request body must be json
   dbDocHandler.request,
@@ -486,6 +489,7 @@ app.post(
 );
 app.put(
   docPath,
+  infodoc.mark,
   authorization.onlineUserPassThrough, // online user requests pass through to the next route,
   jsonParser,
   dbDocHandler.request,
@@ -685,5 +689,19 @@ proxyForAuth.on('proxyRes', (proxyRes, req, res) => {
     proxyRes.pipe(res);
   }
 });
+
+// Fire off metadata updates for sister info docs
+//
+// These intentionally happen out of band (we don't wait on the promise results) for performance
+// reasons.
+//
+// The infodoc service can handle conflicts and deal with them accordingly, as can the sentinel
+// service who also writes to infodocs.
+//
+// This is required anyway, because if you write docs without ids they need to be written to CouchDB
+// (triggering Sentinel) to generate their id, which we need to occur before we can create an
+// infodoc.
+proxyForAuth.on('proxyRes', infodoc.update);
+proxy.on('proxyRes', infodoc.update);
 
 module.exports = app;

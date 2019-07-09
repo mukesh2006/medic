@@ -29,6 +29,8 @@ describe('infodoc', () => {
     });
   });
 
+  it('should handle 409s correctly');
+
   describe('bulkGet', () => {
     it('should do nothing when parameter is empty', () => {
       sinon.stub(db.sentinel, 'allDocs');
@@ -177,6 +179,8 @@ describe('infodoc', () => {
         .then(() => assert.fail())
         .catch(err => assert.deepEqual(err, { some: 'error' }));
     });
+
+    it('should handle 409s correctly');
   });
 
   describe('bulkUpdate', () => {
@@ -280,6 +284,8 @@ describe('infodoc', () => {
           assert.equal(db.sentinel.bulkDocs.callCount, 1);
         });
     });
+
+    it('should handle 409s correctly');
   });
 
   describe('updateTransition(s)', () => {
@@ -355,5 +361,7 @@ describe('infodoc', () => {
         assert.deepEqual(db.sentinel.put.args[0], [Object.assign(info, { transitions: change.info.transitions})]);
       });
     });
+
+    it('should handle 409s correctly');
   });
 });
