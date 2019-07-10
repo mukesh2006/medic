@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@medic/bulk-docs-utils": "file:../shared-libs/bulk-docs-utils",
+    "@medic/infodoc": "file:../shared-libs/infodoc",
     "@medic/lineage": "file:../shared-libs/lineage",
     "@medic/message-utils": "file:../shared-libs/message-utils",
     "@medic/phone-number": "file:../shared-libs/phone-number",

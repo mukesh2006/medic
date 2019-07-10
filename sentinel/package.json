@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@medic/lineage": "file:../shared-libs/lineage",
+    "@medic/infodoc": "file:../shared-libs/infodoc",
     "@medic/message-utils": "file:../shared-libs/message-utils",
     "@medic/phone-number": "file:../shared-libs/phone-number",
     "@medic/registration-utils": "file:../shared-libs/registration-utils",
