@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@uirouter/angularjs": "^1.0.21",
-    "angular": "^1.7.5",
+    "angular": "^1.7.9",
     "angular-cookie": "^4.1.0",
     "angular-nvd3": "^1.0.9",
     "angular-pouchdb": "^5.0.2",
