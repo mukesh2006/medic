@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@uirouter/angularjs": "^0.4.3",
-    "angular": "^1.7.5",
+    "angular": "^1.7.9",
     "angular-cookie": "^4.1.0",
     "angular-pouchdb": "^5.0.2",
     "angular-route": "^1.7.5",
